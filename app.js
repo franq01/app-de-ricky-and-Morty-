@@ -78,30 +78,36 @@ const modalBody = (personaje) => {
 }
 
 const showCharacterById = (id) =>{
+    //se retira la informacion de los personajes
     const urlId = `${urlBase}${id}`;
     fetch(urlId)
          .then(result.json())
          .then(character =>{
-            console.log(character);
-            return modalBody(character);
+            const modalContent = document.querySelector('.modal-body');
+            document.querySelector('.modal-title').innerText=character.name;
+            console.log(character.image);
+            console.log(character.status);
+            console.log(character.origin.name);
+            console.log(character.species);
+            console.log(character.episode.length);
+            modalContent.appendChild(modalBody(character));
          });
 }
 
 
-const loadInfo=(e)=>{
+const loadInfo = (e) =>{
     e.preventDefault();
     if(e.target.classList.contains('btn')){
-        const modalContent=document.querySelector('.modal-body');
-        modalContent.removeChild(modalContent.firstChild);
-        modalContent.appendChild(spinner());
-        setTimeout(()=>{
-            modalContent.removeChild(modalContent.firstChild);
-            const content=document.createElement('div');
-            const id=e.target.getAttribute('data-id');
-            content.innerHTML=`<h2>Id ${id}</h2>`;
-        modalContent.appendChild(content);
-        }, 3000);
-    }
+              //muestra un spinner de carga alver mas en la parte del modal
+      const modalContent = document.querySelector('.modal-body');
+      modalContent.removeChild(modalContent.firstChild);
+      // const content = document.createElement('div');
+      const id = e.target.getAttribute('data-id');
+      //content.innerHTML=`<h2>Id ${id}</h2>`;
+       const content= showCharactersById(id);
+       modalContent.appendChild(content);
+    }, 3000);
+}
 }
 
 const spinner=()=>{
@@ -112,8 +118,8 @@ const spinner=()=>{
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>`;
-  div.innerHTML= html;
-  return html;
+  div.innerHTML = html;
+  return div;
 }
 document.querySelector('#botones').addEventListener('click', navegacion);
 document.querySelector('#characters').addEventListener('click', loadInfo);
