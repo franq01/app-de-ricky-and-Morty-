@@ -1,16 +1,16 @@
-const urlBase= 'https://rickandmortyapi.com/api/character/';
+const urlBase= "https://rickandmortyapi.com/api/character/";
 
 const loadData=(urlBase, page=1)=>{
     const url=`${urlBase}?page=${page}`;
  fetch(url)
-.then(respuesta =>{
+   .then(respuesta =>{
     return respuesta.json();
-}).then(respJson =>{
+    }).then(respJson =>{
     console.log(respJson);
     const info=respJson.info;
     const personajes=respJson.results;
     console.log(info);
-    //validacion
+    //validar botones
     const btnPrev =document.querySelector('#prev');
     const btnNext =document.querySelector('#next');
     if(!info.prev){
@@ -28,27 +28,27 @@ const loadData=(urlBase, page=1)=>{
         btnNext.setAttribute('data-id', Number(page) +1);
     }
     showCharacters(personajes);
-})
-}
+  });
+};
 const showCharacters=(personajes)=> {
     const ListaPersonajes = document.querySelector('#characters');
     //limpiar-
     while(ListaPersonajes.firstChild){
         ListaPersonajes.removeChild(ListaPersonajes.firstChild);
     }
-    personajes.forEach(personaje => {
+    personajes.forEach((personaje => {
         const div =document.createElement('div');
         div.classList.add('col');
         div.classList.add('m-2');;
         div.innerHTML = creaCard(personaje);
        ListaPersonajes.appendChild(div);
         
-    });
-}
+    }));
+};
 const creaCard=(personaje)=>{
     const html=`
     <div class="card bg-dark text-ligth border" style="width: 18rem;">
-  <img src="${personaje.image}" class="card-img-top" alt="...">
+  <img src="${personaje.image}" class="card-img-top" alt="${personaje.image}">
   <div class="card-body">
     <h5 class="card-title">${personaje.name}</h5>
     <p class="card-text">${personaje.status}</p>
@@ -62,17 +62,19 @@ const creaCard=(personaje)=>{
 `;
 return html;
 }
-const navegacion=(e)=>{
 
-    
-    if(e.target.classList.contains('btn')){
-        const id=e.target.getAttribute('data-id');
-        loadData(urlBase, id);
-    }
-}
 const modalBody = (personaje) => {
     const div = document.createElement('div');
-    let html = '';
+    div.classList.add('text-center');
+    let html =``;
+    html += `<img src="${personaje.image}" class="thumbnail">`;
+    html += `<p>${personaje.status}- ${personaje.species}</p>`;
+    html += `<p>Ultima ubicacion conocida</p> <p>${personaje.origin.name}</p>`;
+    html += `<p>Ha aparecido en ${personaje.episode.length}Episodios</p>`;
+    div.innerHTML = html;
+    return div;
+
+    
 }
 
 const showCharacterById = (id) =>{
